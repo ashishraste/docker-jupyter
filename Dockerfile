@@ -47,11 +47,24 @@ RUN wget https://github.com/Unidata/netcdf-c/archive/v4.4.1.1.tar.gz \
         && rm -rf netcdf-c-4.4.1.1 \
         && rm -rf v4.4.1.1.tar.gz
 
+# GEOS Installation
+RUN wget http://download.osgeo.org/geos/geos-3.6.2.tar.bz2 \
+        && tar xf geos-3.6.2.tar.bz2 \
+        && cd geos-3.6.2 \
+        && ./configure --prefix=/usr \
+        && make -j4 \
+        && make install \
+        && cd .. \
+        && rm -rf geos-3.6.2 \
+        && rm -rf geos-3.6.2.tar.bz2
+
 RUN HDF5_LIBDIR=/usr/lib HDF5_INCDIR=/usr/include python3 -m pip --no-cache-dir install \
 	notebook \
 	requests \
 	netcdf4 \
 	matplotlib \
+        pyproj \
+        https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz \
 	&& mkdir /notebooks
 
 WORKDIR /notebooks

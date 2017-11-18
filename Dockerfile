@@ -7,8 +7,12 @@ RUN apk --no-cache add \
 	freetype-dev \
 	g++ \
 	gcc \
+	gfortran \
+	git \
+	lapack-dev \
 	libpng-dev \
 	libstdc++ \
+	linux-headers \
 	m4 \
 	make \
 	musl-dev \
@@ -20,6 +24,11 @@ RUN apk --no-cache add \
 	&& pip3 install --upgrade pip \
 	&& python3 -m pip --no-cache-dir install \
 	numpy
+
+RUN apk --no-cache add \
+        --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+        proj4-dev
+
 # HDF5 Installation
 RUN wget https://www.hdfgroup.org/package/bzip2/?wpdmdl=4300 \
         && mv "index.html?wpdmdl=4300" hdf5-1.10.1.tar.bz2 \
@@ -58,6 +67,15 @@ RUN wget http://download.osgeo.org/geos/geos-3.6.2.tar.bz2 \
         && rm -rf geos-3.6.2 \
         && rm -rf geos-3.6.2.tar.bz2
 
+# GDAL Installation
+RUN git clone https://github.com/OSGeo/gdal.git /gdalgit \
+        && cd /gdalgit/gdal \
+        && ./configure --prefix=/usr \
+        && make \
+        && make install \
+	&& cd / \
+	&& rm -rf gdalgit
+
 RUN HDF5_LIBDIR=/usr/lib HDF5_INCDIR=/usr/include python3 -m pip --no-cache-dir install \
 	notebook \
 	requests \
@@ -65,6 +83,10 @@ RUN HDF5_LIBDIR=/usr/lib HDF5_INCDIR=/usr/include python3 -m pip --no-cache-dir 
 	matplotlib \
         pyproj \
         https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz \
+        scipy \
+        scikit-learn \
+        pandas \
+	gdal \
 	&& mkdir /notebooks
 
 WORKDIR /notebooks

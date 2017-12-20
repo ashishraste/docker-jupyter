@@ -77,16 +77,21 @@ RUN git clone https://github.com/OSGeo/gdal.git /gdalgit \
 	&& rm -rf gdalgit
 
 RUN HDF5_LIBDIR=/usr/lib HDF5_INCDIR=/usr/include python3 -m pip --no-cache-dir install \
+        boto3 \
+        cartopy \
+        fiona \
+        gdal \
+        geopandas \
+        matplotlib \
+        netcdf4 \
 	notebook \
-	requests \
-	netcdf4 \
-	matplotlib \
+        pandas \
         pyproj \
+	requests \
         https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz \
         scipy \
         scikit-learn \
-        pandas \
-	gdal \
+        shapely \
 	&& mkdir /notebooks
 
 WORKDIR /notebooks
